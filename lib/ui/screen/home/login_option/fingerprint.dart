@@ -1,65 +1,3 @@
-  /* import 'package:currency_detector_app/ui/screen/home/home_screen.dart';
-import 'package:currency_detector_app/ui/utils/app_assets.dart';
-import 'package:currency_detector_app/ui/utils/app_color.dart';
-import 'package:currency_detector_app/ui/utils/app_theme.dart';
-import 'package:flutter/material.dart';
-import 'local_auth_serives.dart';
-
-class FingerPrint extends StatelessWidget {
-  static String routeName = "Fingerprint";
-  const FingerPrint({super.key});
-  
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColor.primary,AppColor.accet,AppColor.primary],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter)),
-      child: Scaffold(
-        backgroundColor: AppColor.transparent,
-        body: SafeArea(
-          child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 30,),
-              const Row(
-                children: [
-                  Spacer(),
-                  ImageIcon(AssetImage(AppAssets.vector)),
-                ]),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColor.accet,
-                  borderRadius: BorderRadius.circular(30)),
-                  padding: const EdgeInsets.all(20),
-                child: const Text("login with FingerPrint",style: AppTheme.loginTitleText,)),
-              const Spacer(),
-              ElevatedButton(
-                onPressed:() async{
-                      bool isAuthenticated = await AuthService.authenticateUser();
-                      if(isAuthenticated){
-                        Navigator.pushNamed(context, HomeScreen.routeName);
-                      }else{
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Authentication failed.")));
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.transparent,
-                      elevation: 0),
-                child: Image.asset(AppAssets.logoFingerprint,)),   
-            ]),
-        ),
-      ),
-    );
-  }
-} 
- */
-
-
-
-
 import 'package:currency_detector_app/ui/screen/home/home_screen.dart';
 import 'package:currency_detector_app/ui/utils/app_assets.dart';
 import 'package:currency_detector_app/ui/utils/app_color.dart';
@@ -75,6 +13,7 @@ class FingerPrint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     // Function to speak the given text using TTS
     Future<void> speak(String text) async {
       await tts.speak(text);
@@ -102,26 +41,23 @@ class FingerPrint extends StatelessWidget {
           backgroundColor: AppColor.transparent,
           body: SafeArea(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 30),
-                const Row(
-                  children: [
-                    Spacer(),
-                    ImageIcon(AssetImage(AppAssets.vector)),
-                  ],
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.accet,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  padding: const EdgeInsets.all(20),
-                  child: const Text(
-                    "Login with Fingerprint",
-                    style: AppTheme.loginTitleText,
+                SizedBox(height: height * 0.1),
+                Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColor.accet,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    child: const Text(
+                      "Login with Fingerprint",
+                      style: AppTheme.loginTitleText,
+                    ),
                   ),
                 ),
-                const Spacer(),
+                SizedBox(height: height * 0.61,),
                 ElevatedButton(
                   onPressed: () async {
                     speak('''you are right.. Tap the fingerprint in you phone .''');
@@ -141,6 +77,7 @@ class FingerPrint extends StatelessWidget {
                   ),
                   child: Image.asset(AppAssets.logoFingerprint),
                 ),
+                //SizedBox(height: height * 0.9,)
               ],
             ),
           ),

@@ -1,6 +1,7 @@
 import 'package:currency_detector_app/ui/screen/scan/scan.dart';
 import 'package:currency_detector_app/ui/utils/app_assets.dart';
 import 'package:currency_detector_app/ui/utils/app_color.dart';
+import 'package:currency_detector_app/ui/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -10,6 +11,7 @@ class HomeScreen extends StatelessWidget {
   final FlutterTts tts = FlutterTts();
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     Future<void> speak (String text)async{
       await tts.speak(text);
     }
@@ -29,14 +31,24 @@ class HomeScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: AppColor.transparent,
           body: SafeArea(
-            child: Center(
-              child: Column(
-                //mainAxisAlignment: MainAxisAlignment.center,
-                //crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Image.asset(AppAssets.logovoice,)
-                ],
-              ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: Image.asset(AppAssets.logovoice,)),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    margin: const EdgeInsets.all(25),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff2B3253),
+                      border: Border.all(color: AppColor.white),
+                      borderRadius: BorderRadius.circular(15)),
+                    child: Center(child: Text("Top to Scan",style: AppTheme.loginTitleText.copyWith(fontWeight: FontWeight.w600),)),  ),
+                ),
+              ],
             ),
           ),
         )),
