@@ -1,87 +1,30 @@
-import 'package:currency_detector_app/data/api/api_manager.dart';
-import 'package:currency_detector_app/ui/screen/scan/diplay_image.dart';
+import 'package:camera/camera.dart';
+import 'package:currency_detector_app/ui/screen/scan/scan_view_model.dart';
 import 'package:currency_detector_app/ui/utils/app_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
 
-class ScanPictureScreen extends StatefulWidget {
+class ScanPictureScreen extends StatelessWidget {
   static String routeName = "Scan Screen";
   final List<CameraDescription> myCamera;
   const ScanPictureScreen({super.key,required this.myCamera});
-  //final CameraDescription camera;
-  @override
-  State<ScanPictureScreen> createState() => _ScanPictureScreenState();
-}
 
-class _ScanPictureScreenState extends State<ScanPictureScreen> {
-  late CameraController _cameraController;
-  late Future<void> _initializeControllerFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    //It initializes _cameraController with the first camera from the list and 
-    //sets the resolution preset to medium.
-    _cameraController = CameraController(
-      // Get a specific camera from the list of available cameras.
-      widget.myCamera[0],
-      // Define the resolution to use.
-      ResolutionPreset.medium,
-    );
-
-    // Next, initialize the controller. This returns a Future.
-    _initializeControllerFuture = _cameraController.initialize();
-  }
-  @override
-  void dispose() {
-    // Dispose of the controller when the widget is disposed.
-    _cameraController.dispose();
-    super.dispose();
-  }
   @override
   Widget build(BuildContext context) {
+    final viewModel = ScanImageViewMode(myCamera);
     return GestureDetector(
-      onTap: () async{
-        // Provide an onPressed callback.
-              // Take the Picture in a try / catch. If anything goes wrong,
-              // catch the error.
-              try {
-                // Ensure that the camera is initialized.
-                await _initializeControllerFuture;
-        
-                // Attempt to take a picture and get the file `image`
-                // where it was saved.
-                final image = await _cameraController.takePicture();
-        
-                if (!mounted) return;
-                await sendImageToApi(image.path);
-                
-                // If the picture was taken, display it on a new screen.
-                await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DisplayImage(imagePath: image.path)
-                  ),
-                );
-              } catch (e) {
-                // If an error occurs, log the error to the console.
-                print(e);
-              };  
-      },
+      onTap: () => viewModel.captureImage(context),
       child: Scaffold(
-        // You must wait until the controller is initialized before displaying the
-        // camera preview. Use a FutureBuilder to display a loading spinner until the
-        // controller has finished initializing.
         body: SafeArea(
           child: Column(
             children: [
               Expanded(
                 flex: 8,
                 child: FutureBuilder<void>(
-                future: _initializeControllerFuture, 
+                future: viewModel.initializeControllerFuture, 
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     // If the Future is complete, display the camera.
-                    return CameraPreview(_cameraController);
+                    return CameraPreview(viewModel.cameraController);
                   } else {
                     // Otherwise, display a loading indicator.
                     return const Center(child: CircularProgressIndicator());
@@ -106,6 +49,25 @@ class _ScanPictureScreenState extends State<ScanPictureScreen> {
   }
 }
 
+class MoneyRectanglesPainter extends CustomPainter {
+  final List<Rect> detectedMoneyRectangles; // List of detected money bounding boxes
+  MoneyRectanglesPainter({required this.detectedMoneyRectangles});
 
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.green
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
 
- 
+    // Loop through detectedMoneyRectangles and draw a rectangle for each one
+    for (final rect in detectedMoneyRectangles) {
+      canvas.drawRect(rect, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false; // No need to repaint unless something changes
+  }
+}
