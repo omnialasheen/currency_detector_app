@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
-import '../model/image_response.dart';
-
 Future<void> sendImageToApi(String imagePath) async {
   var url = Uri.parse('https://nextechs.xyz/currency/add.php');
   var responce = http.MultipartRequest('POST',url);
