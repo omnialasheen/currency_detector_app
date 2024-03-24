@@ -1,14 +1,24 @@
 import 'dart:io';
 import 'package:currency_detector_app/ui/utils/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class DisplayImage extends StatelessWidget {
   static String routeName = "Display Image";
   final String imagePath;
-  const DisplayImage({super.key,required this.imagePath});
+  final FlutterTts tts = FlutterTts();
+  DisplayImage({super.key,required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
+    Future<void> speak(String text) async {
+      await tts.speak(text);
+    }
+
+    // Speak initial instructions when the screen is loaded
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      speak('''20 Egyption pound.''');
+    });
     return Scaffold(
       body: SafeArea(
         child: Column(
