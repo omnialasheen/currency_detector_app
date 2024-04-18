@@ -1,7 +1,8 @@
 import 'package:currency_detector_app/ui/screen/finished_screen.dart';
 import 'package:currency_detector_app/ui/screen/home/double_scan.dart';
 import 'package:currency_detector_app/ui/screen/home/home_screen.dart';
-import 'package:currency_detector_app/ui/screen/login_option/fingerprint.dart';
+import 'package:currency_detector_app/ui/screen/login/auth_view.dart';
+import 'package:currency_detector_app/ui/screen/login/fingerprint.dart';
 import 'package:currency_detector_app/ui/screen/scan/scan.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
@@ -24,13 +25,14 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
+        AuthLogin.routeName:(context) => AuthLogin(),
         HomeScreen.routeName:(context) => HomeScreen(),
         FingerPrint.routeName:(context) => FingerPrint(),
         ScanPictureScreen.routeName:(context) => ScanPictureScreen(myCamera: cameras),
         DoubleScanScreen.routeName:(context) => DoubleScanScreen(),
         FinishScreen.routeName:(context) => FinishScreen(),
       },
-      initialRoute: FingerPrint.routeName,
+      initialRoute: AuthLogin.routeName,
       
     );
   }

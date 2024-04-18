@@ -8,6 +8,7 @@ class DisplayImage extends StatelessWidget {
   static String routeName = "Display Image";
   final String imagePath;
   final FlutterTts tts = FlutterTts();
+  late int scanResult;
   DisplayImage({super.key,required this.imagePath});
 
   @override
