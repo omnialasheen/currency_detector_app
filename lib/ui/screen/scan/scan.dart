@@ -49,7 +49,7 @@ class ScanPictureScreen extends StatelessWidget {
   }
 }
 
-class MoneyRectanglesPainter extends CustomPainter {
+/* class MoneyRectanglesPainter extends CustomPainter {
   final List<Rect> detectedMoneyRectangles; // List of detected money bounding boxes
   MoneyRectanglesPainter({required this.detectedMoneyRectangles});
 
@@ -70,4 +70,4 @@ class MoneyRectanglesPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false; // No need to repaint unless something changes
   }
-}
+} */
