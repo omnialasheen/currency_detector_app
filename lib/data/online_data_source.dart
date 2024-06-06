@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 
@@ -20,6 +19,7 @@ Future<void> sendImageToApi(String imagePath) async {
   if (response.statusCode >= 200 && response.statusCode < 300) {
     var responseBody = await response.stream.bytesToString();
     print('Response Body : $responseBody' '$response.statusCode');
+    
     
     /* var jsonResponse = json.decode(responseBody);
     var imageResponse = ImageModel.fromJson(jsonResponse);

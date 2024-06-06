@@ -5,4 +5,5 @@ class AppColor {
   static const Color accet = Color(0xff000235);
   static const Color white = Colors.white;
   static const Color transparent =Colors.transparent;
+  static const Color ButtonColor = Color(0xff2B3252);
 }

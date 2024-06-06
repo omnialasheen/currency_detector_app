@@ -4,8 +4,10 @@ import 'package:currency_detector_app/ui/screen/home/home_screen.dart';
 import 'package:currency_detector_app/ui/screen/login/auth_view.dart';
 import 'package:currency_detector_app/ui/screen/login/fingerprint.dart';
 import 'package:currency_detector_app/ui/screen/scan/scan.dart';
+import 'package:currency_detector_app/ui/screen/scan/scan_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
 
 
 late List<CameraDescription>  cameras;
@@ -16,7 +18,9 @@ Future<void> main() async {
 
   // Obtain a list of the available cameras on the device.
   cameras = await availableCameras();
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => ScanImageViewModel(cameras),
+    child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

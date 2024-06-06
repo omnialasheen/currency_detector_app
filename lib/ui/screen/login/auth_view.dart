@@ -14,7 +14,6 @@ class AuthLogin extends StatefulWidget {
 class _AuthLoginState extends State<AuthLogin> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     check();
   }
@@ -22,7 +21,7 @@ class _AuthLoginState extends State<AuthLogin> {
     SharedPreferences loginSharedPreferences = await SharedPreferences.getInstance();
     bool isLogin = loginSharedPreferences.getBool("isLogin")?? false;
     if(isLogin){
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
     }
   }
   @override

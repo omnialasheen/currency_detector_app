@@ -423,3 +423,247 @@ class _ScanPictureScreenState extends State<ScanPictureScreen> {
     );
   }
 } */
+
+
+//odd shared preferences
+/* Future<void> saveScanResult(dynamic detectedMoney) async{
+    SharedPreferences scanSharedPreferences = await SharedPreferences.getInstance();
+    //await scanSharedPreferences.setInt("scanResult", detectedMoney);
+
+    List<String>? existingResults = scanSharedPreferences.getStringList("scanResult") ?? [];
+  
+    // Convert the detected money to a string and add it to the existing results
+    existingResults.add(detectedMoney.toString());
+
+    // Save the updated list of scan results
+    await scanSharedPreferences.setStringList("scanResult", existingResults);
+
+    /* await scanSharedPreferences.setStringList("scanResult", detectedMoney);
+    List<String>? resultString = await scanSharedPreferences.getStringList("scanResult");
+    List<int> resultInt = resultString!.map((e) => int.parse(e)).toList();
+    */
+    /* int currentTotal = await scanSharedPreferences.getInt("TotalDetectedMoney")?? 0;
+    int newTotal =  currentTotal + detectedMoney;
+    scanSharedPreferences.setInt("TotalDetectedMoney", newTotal); */
+  } */
+
+//scan screen box
+  /* class MoneyRectanglesPainter extends CustomPainter {
+  final List<Rect> detectedMoneyRectangles; // List of detected money bounding boxes
+  MoneyRectanglesPainter({required this.detectedMoneyRectangles});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.green
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    // Loop through detectedMoneyRectangles and draw a rectangle for each one
+    for (final rect in detectedMoneyRectangles) {
+      canvas.drawRect(rect, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false; // No need to repaint unless something changes
+  }
+} */
+
+
+/* List<Widget> displayBoxesAroundRecognizedObjects(){
+    Size screen = MediaQuery.of(context).size;
+    if(viewModel.recognitionsList == null) return [];
+    double factorX = screen.width;
+    double factorY = screen.height;
+
+    return viewModel.recognitionsList!.map((result) {
+      return Positioned(
+        left: result["rect"]["x"] * factorX,
+        top: result["rect"]["y"] * factorY,
+        width: result["rect"]["w"] * factorX,
+        height: result["rect"]["h"] * factorY,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+            border: Border.all(color: Colors.pink,width: 2.0),
+          ),
+        ));
+    }).toList();
+  } */
+
+  // border:
+ /*  class DisplayRecognizedObjects extends StatelessWidget {
+  final List<dynamic>? recognitionsList;
+  const DisplayRecognizedObjects({Key? key, this.recognitionsList}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: buildBoxes(context),
+    );
+  }
+
+  List<Widget> buildBoxes(BuildContext context) {
+    List<Widget> boxes = [];
+
+    if (recognitionsList != null) {
+      Size screen = MediaQuery.of(context).size;
+      for (var recognition in recognitionsList!) {
+        double left = recognition["rect"]["x"] * screen.width;
+        double top = recognition["rect"]["y"] * screen.height;
+        double width = recognition["rect"]["w"] * screen.width;
+        double height = recognition["rect"]["h"] * screen.height;
+
+        boxes.add(
+          Positioned(
+            left: left,
+            top: top,
+            width: width,
+            height: height,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  color: Colors.red,
+                  width: 2,
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    }
+    return boxes;
+  }
+} */
+
+
+
+// run model and image packer
+/*  runModel() async{
+    try{
+      Tflite.loadModel(
+      model: "assets/ssd_mobilenet.tflite",
+      labels: "assets/ssd_mobilenet.txt"
+    );
+      List<dynamic>? result  = await Tflite.detectObjectOnFrame(
+        bytesList: cameraImage.planes.map((plane) {
+          return plane.bytes;
+        }).toList(),
+        imageHeight: cameraImage.height,
+        imageWidth: cameraImage.width,
+        imageMean: 127.5,
+        imageStd: 127.5,
+        numResultsPerClass: 1,
+        threshold: 0.4
+      );
+      if(result != null){
+        recognitionsList = result;
+        notifyListeners();
+      }
+    }catch(e){
+      print("Error running model: $e");
+    }
+  }  */
+
+  /* Future<File?> galleryPicker()async{
+ 
+    PermissionStatus status;
+    if(Platform.isAndroid){
+      final androidInfo = await DeviceInfoPlugin().androidInfo;
+      if(androidInfo.version.sdkInt <= 32){
+        status = await Permission.storage.request();
+      }else{
+        status = await Permission.phone.request();
+      }
+    }else{
+      status = await Permission.phone.request();
+    }
+    if(status.isGranted){
+      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if(image != null){
+        File imageFile = File(image.path);
+        notifyListeners();
+        return imageFile;
+      }
+    }
+    return null;
+  } */
+
+
+
+  ///image picker
+  ///* import 'dart:io';
+/* import 'package:currency_detector_app/ui/screen/scan/scan_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class ImagePickerPhoto extends StatefulWidget {
+  const ImagePickerPhoto({super.key});
+  static String routeName = "image picker";
+
+  @override
+  State<ImagePickerPhoto> createState() => _ImagePickerPhotoState();
+}
+
+class _ImagePickerPhotoState extends State<ImagePickerPhoto> {
+  late ScanImageViewModel viewModel;
+  File? pickImage;
+  
+  @override
+  Widget build(BuildContext context) {
+    viewModel = Provider.of(context);
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 26,),
+            ElevatedButton(onPressed: () async{
+              pickImage = await viewModel.galleryPicker();
+            }, child: Text("upload Image")),
+            if(pickImage != null)
+            CircleAvatar(
+              radius: 75,
+              backgroundImage: FileImage(pickImage!),)
+          ]),
+      ),
+    );
+  }
+} */ 
+
+
+//customer_fingerPrint_diolog
+/* // custom_dialog.dart
+import 'package:currency_detector_app/ui/screen/login/local_auth_serives.dart';
+import 'package:flutter/material.dart';
+
+class CustomFingerprintDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Authentication Required"),
+      content: Text("Verify your identity using fingerprint."),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            // Handle fingerprint authentication
+            final isAuthenticated = await AuthService.authenticateUser();
+            if (isAuthenticated) {
+              // User successfully authenticated
+              Navigator.of(context).pop(); // Close the dialog
+              // Proceed with your app logic (e.g., navigate to home screen)
+            } else {
+              // Authentication failed
+              // Show an error message within the dialog
+            }
+          },
+          child: Text("Use Fingerprint"),
+        ),
+      ],
+    );
+  }
+ */
