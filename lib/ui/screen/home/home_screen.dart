@@ -11,14 +11,13 @@ class HomeScreen extends StatelessWidget {
   final FlutterTts tts = FlutterTts();
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    Future<void> speak (String text)async{
+   /*  Future<void> speak (String text)async{
       await tts.speak(text);
-    }
+    } */
     // Speak initial instructions when the screen is loaded
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    /* WidgetsBinding.instance.addPostFrameCallback((_) {
       speak('''tap to scan''');
-    });
+    }); */
     return GestureDetector(
       onTap:() {
         Navigator.pushNamed(context, ScanPictureScreen.routeName);
@@ -46,7 +45,8 @@ class HomeScreen extends StatelessWidget {
                       color: const Color(0xff2B3253),
                       border: Border.all(color: AppColor.white),
                       borderRadius: BorderRadius.circular(15)),
-                    child: Center(child: Text("Tap to Scan",style: AppTheme.loginTitleText.copyWith(fontWeight: FontWeight.w600),)),  ),
+                    child: Center(child: Text("Tap to Scan",
+                      style: AppTheme.loginTitleText.copyWith(fontWeight: FontWeight.w600),)),),
                 ),
               ],
             ),
