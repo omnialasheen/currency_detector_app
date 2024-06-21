@@ -6,15 +6,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplayResultViewModel extends ChangeNotifier{
   final FlutterTts tts = FlutterTts();
+  String? responseBody;
     
   // Function to speak the given text using TTS
   Future<void> speak(String text) async{
     await tts.speak(text);
   }
-  
+  void setResponseBody(String response) {
+    responseBody = response;
+    notifyListeners();
+  }
   int getValueFromApi(){
-    //saveScanResult(detectedMoney)
-    return 20;
+    try{
+      if(responseBody == null){
+        throw Exception("Response body is null");
+      }
+      int detectedMoney = int.parse(responseBody!);
+      saveScanResult(detectedMoney);
+      return detectedMoney;
+    }catch(e){
+      print("someThing went wrong : $e");
+    }
+    return 0;
   }
 
   static const String key= "scanResults";

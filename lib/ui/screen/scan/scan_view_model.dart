@@ -7,7 +7,6 @@ import 'package:flutter_tts/flutter_tts.dart';
 class ScanImageViewModel extends ChangeNotifier{
   late CameraController cameraController;
   late Future<void> initializeControllerFuture;
-  bool isSentCorrect = false;
   String? errorText;
   final FlutterTts tts = FlutterTts();
     
@@ -32,11 +31,12 @@ class ScanImageViewModel extends ChangeNotifier{
       //Attempt to take a picture anfirst d get the file `image` where it was saved.
       final image = await cameraController.takePicture();
       ///if (!mounted) return;
-      await sendImageToApi(image.path);
-      //isSentCorrect = true;
+      final responceBody = await sendImageToApi(image.path);
       notifyListeners();
      Navigator.of(context).push(MaterialPageRoute(
-        builder:(context) => DisplayResult(imagePath: image.path),));
+        builder:(context) => DisplayResult(
+          imagePath: image.path,
+          responseBody: responceBody??"",),));
     }catch(error){
       errorText = error.toString();
       notifyListeners();

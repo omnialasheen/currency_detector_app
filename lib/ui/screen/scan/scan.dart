@@ -18,11 +18,9 @@ class _ScanPictureScreenState extends State<ScanPictureScreen> {
 
   @override
   void initState(){
-
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       viewModel.speak('''camera opened''');
-      
     });
   }
   @override
